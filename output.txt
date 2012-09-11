@@ -1,0 +1,238 @@
+> <1. create test folders and files> 
+> 
+=== / ===
+
+> > 
+=== / ===
+example.txt                     0
+
+> > 
+=== / ===
+d1                   d          0
+example.txt                     0
+
+> > 
+=== /d1/ ===
+
+> > 
+=== /d1/ ===
+f1.txt                          0
+
+> > 
+=== /d1/ ===
+f1.txt                         23
+
+> > > > 
+=== /d1/ ===
+d2                   d          0
+f1.txt                         23
+f2.txt                         27
+
+> > <2. display contents> 
+> I am the contents of f1
+> and I am the contents of f2
+> > <3. create link> 
+> > 
+=== / ===
+d1                   d         17
+example.txt                     0
+
+> > > > 
+=== / ===
+d1                   d         17
+d2                   d          7
+d3                   d          0
+example.txt                     0
+
+> > 
+=== /d2/ ===
+f2.txt                         23
+
+> <4. display link contents> 
+> I am the contents of f1
+> > <5. move link> 
+> > 
+=== / ===
+d1                   d         17
+d2                   d          7
+d3                   d          0
+example.txt                     0
+
+> > 
+=== / ===
+d1                   d         17
+d2                   d          7
+d3                   d          0
+example.txt                     0
+
+> <6. display link contents> 
+> I am the contents of f1
+> > 
+=== /d2/ ===
+f3.txt                         23
+
+> > <7. move original> 
+> > 
+=== / ===
+d1                   d         17
+d2                   d          7
+d3                   d          0
+example.txt                     0
+
+> > 
+=== / ===
+d1                   d         10
+d2                   d          7
+d3                   d          0
+example.txt                     0
+f4.txt                         23
+
+> <8. display original contents> 
+> I am the contents of f1
+> <9. display link contents> 
+> I am the contents of f1
+> > <10. move original again> 
+> > 
+=== / ===
+d1                   d         10
+d2                   d         14
+d3                   d          0
+example.txt                     0
+
+> <11. display link contents> 
+> > 
+=== /d2/ ===
+f3.txt                         23
+f4.txt                         23
+
+> I am the contents of f1
+> > I am the contents of f1 - added to the link version
+> 
+=== /d2/ ===
+f3.txt                         51
+f4.txt                         51
+
+> > <12. make a link to a link> 
+> > > 
+=== /d1/ ===
+d2                   d          0
+f2.txt                         27
+
+> > > > 
+=== /d1/ ===
+d2                   d          0
+f2.txt                         27
+f3.txt                         51
+
+> <13. display link to link content> 
+> I am the contents of f1 - added to the link version
+> > <14. make a link to a directory> 
+> > 
+=== / ===
+d1                   d         17
+d2                   d         14
+d3                   d          0
+example.txt                     0
+
+> > 
+=== / ===
+d1                   d         17
+d2                   d         14
+d3                   d          0
+d4                   d         14
+example.txt                     0
+
+> > 
+=== /d2/ ===
+f3.txt                         51
+f4.txt                         51
+
+> > > 
+=== /d4/ ===
+f3.txt                         51
+f4.txt                         51
+
+> > <15. delete a link> 
+> > 
+=== / ===
+d1                   d         17
+d2                   d         14
+d3                   d          0
+d4                   d         14
+example.txt                     0
+
+> > 
+=== / ===
+d1                   d         17
+d2                   d         14
+d3                   d          0
+d4                   d         14
+
+> > <16. delete a directory> 
+> > 
+=== / ===
+d2                   d         14
+d3                   d          0
+d4                   d         14
+
+> > <17. delete a linked directory> 
+> > > 
+=== /d2/ ===
+f3.txt                         51
+f4.txt                         51
+f5.txt                          0
+
+> > > 
+=== /d4/ ===
+f3.txt                         51
+f4.txt                         51
+f5.txt                          0
+
+> > > 
+=== / ===
+d3                   d          0
+d4                   d         21
+
+> > 
+=== /d4/ ===
+f3.txt                         51
+f4.txt                         51
+f5.txt                          0
+
+> > <18. delete all links> 
+> > > > 
+=== /d3/ ===
+f6.txt                         51
+
+> > > 
+=== /d4/ ===
+f3.txt                         51
+f4.txt                         51
+f5.txt                          0
+
+> > > > 
+=== /d3/ ===
+
+> > > 
+=== /d4/ ===
+f5.txt                          0
+
+> > <19. move a directory> 
+> > 
+=== / ===
+d3                   d          0
+d4                   d          7
+
+> > 
+=== / ===
+d3                   d          3
+
+> > 
+=== /d3/ ===
+d5                   d          7
+
+> > 
+=== /d3/d5/ ===
+f5.txt                          0
+
+> > 

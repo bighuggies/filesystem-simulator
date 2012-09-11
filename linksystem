@@ -1,0 +1,6 @@
+#!/bin/bash
+
+mkdir filesystem 2> /dev/null
+cd filesystem
+echo | pwd
+../filesystem.py

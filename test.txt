@@ -1,0 +1,136 @@
+"<1. create test folders and files>"
+listfiles
+create example.txt
+listfiles
+mkdir d1
+listfiles
+enter d1
+listfiles
+create f1.txt
+listfiles
+append "I am the contents of f1" f1.txt
+listfiles
+mkdir d2
+create f2.txt
+append "and I am the contents of f2" f2.txt
+listfiles
+
+"<2. display contents>"
+show f1.txt
+show f2.txt
+
+"<3. create link>"
+home
+listfiles
+mkdir d2
+mkdir d3
+link d2/f2.txt d1/f1.txt
+listfiles
+enter d2
+listfiles
+"<4. display link contents>"
+show f2.txt
+
+"<5. move link>"
+home
+listfiles
+move d2/f2.txt d2/f3.txt
+listfiles
+"<6. display link contents>"
+show d2/f3.txt
+enter d2
+listfiles
+
+"<7. move original>"
+home
+listfiles
+move d1/f1.txt f4.txt
+listfiles
+"<8. display original contents>"
+show f4.txt
+"<9. display link contents>"
+show d2/f3.txt
+
+"<10. move original again>"
+move f4.txt d2/f4.txt
+listfiles
+"<11. display link contents>"
+enter d2
+listfiles
+show f3.txt
+append " - added to the link version" f3.txt
+show f4.txt
+listfiles
+
+"<12. make a link to a link>"
+home
+enter d1
+listfiles
+home
+link d1/f3.txt d2/f3.txt
+enter d1
+listfiles
+"<13. display link to link content>"
+show f3.txt
+
+"<14. make a link to a directory>"
+home
+listfiles
+link d4 d2
+listfiles
+enter d2
+listfiles
+home
+enter d4
+listfiles
+
+"<15. delete a link>"
+home
+listfiles
+delete example.txt
+listfiles
+
+"<16. delete a directory>"
+delete d1
+listfiles
+
+"<17. delete a linked directory>"
+enter d2
+create f5.txt
+listfiles
+home
+enter d4
+listfiles
+home
+delete d2
+listfiles
+enter d4
+listfiles
+
+"<18. delete all links>"
+home
+link d3/f6.txt d4/f3.txt
+enter d3
+listfiles
+home
+enter d4
+listfiles
+home
+deleteall d3/f6.txt
+enter d3
+listfiles
+home
+enter d4
+listfiles
+
+"<19. move a directory>"
+home
+listfiles
+move d4 d3/d5
+listfiles
+enter d3
+listfiles
+enter d5
+listfiles
+
+quit
