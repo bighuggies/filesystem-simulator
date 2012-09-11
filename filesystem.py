@@ -1,166 +1,102 @@
 #!/usr/bin/env python
 
 import sys
-import os
-
-HOME = os.getcwd()
-CWD = '/'
 
 
 class FileSystem(object):
     def __init__(self):
-        self.root = Directory('', None)
-        self.pwd = self.root
+        self.filesystem = {
+            '/': {}
+        }
+
+        self.pwd = self.home()
+
+    def home(self):
+        return self.filesystem['/']
 
     def get_file(self, path):
-        if not path:
-            return self.pwd
-        if path == '/':
-            return self.root
-        elif path[0] == '/':
-            root = self.root
-            path = path[1:]
+        parts = path.split('/')
+
+        file = self.pwd
+        for p in parts:
+            file = file[p]
+
+        return file
+
+    def get_parent(self, path):
+        if '/' in path:
+            return self.get_file('/'.join(path.split('/')[:-1]))
         else:
-            root = self.pwd
+            return self.pwd
 
-        file_names = path.split('/')
-        f = root
-
-        for name in file_names:
-            f = f.files[name]
-
-        return f
-
-    def get_path(self, filen):
-        if filen == self.root:
+    def get_absolute_path(self, file):
+        if file == self.home():
             return '/'
+        else:
+            return '/' + self.bfs(self.filesystem, file).strip('/') + '/'
 
-        path = filen.name + '/'
+    def bfs(self, parent, file):
+        for key, value in parent.items():
+            if value == file:
+                return key
+            else:
+                return key + '/' + self.bfs(value, file)
 
-        while filen.parent is not None:
-            path = filen.parent.name + '/' + path
-            filen = filen.parent
+    def get_filename(self, path):
+        return path.split('/')[-1]
 
-        return path
-
-    def change_directory(self, path):
+    def enter(self, path):
         self.pwd = self.get_file(path)
 
-    def create_file(self, path, type):
-        filename = path.split('/')[-1]
-        path = '/'.join(path.split('/')[:-1])
+    def create(self, path, file):
+        print('Creating ' + path + ' with value ' + str(file))
+        parent = self.get_parent(path)
+        parent[self.get_filename(path)] = file
 
-        if path:
-            directory = self.get_file(path)
-        else:
-            directory = self.pwd
+    def delete(self, path):
+        print('Deleting ' + path)
+        parent = self.get_parent(path)
+        del parent[self.get_filename(path)]
 
-        if type == 'text':
-            directory.add_file(TextFile(filename, directory))
-        elif type == 'dir':
-            directory.add_file(Directory(filename, directory))
-
-    def link(self, link, path):
-        #todo
-        pass
-
-    def list_files(self):
-        print('=== ' + self.get_path(self.pwd) + ' ===')
-        for f in sorted(self.pwd.files.values()):
-
-            sys.stdout.write(f.name)
-            for i in xrange(21 - len(f.name)):
-                sys.stdout.write(' ')
-
-            if (type(f) == Directory):
-                sys.stdout.write('d ')
-            else:
-                sys.stdout.write('  ')
-
-            if (type(f) == TextFile):
-                size = str(len(f.text))
-                size_len = len(size)
-            elif (type(f) == Directory):
-                # Gets the sum of the length of all the filenames in a directory
-                # + 1 for each directory
-                size = str(len(':'.join([fi.name for fi in f.files.values()])) + 1)
-                size_len = len(size)
-
-            for i in xrange(11 - size_len):
-                sys.stdout.write(' ')
-            sys.stdout.write(size)
-            sys.stdout.write('\n')
-
-    def append(self, *args):
-        path = args[-1]
-        text = ' '.join(args[:-1]).strip('"')
-
-        self.get_file(path).append(text)
+    def append(self, text, path):
+        print('Appending "' + text + '" to ' + str(path))
+        file = self.get_file(path)
+        file['text'] = file['text'] + text
 
     def show(self, path):
-        print(self.get_file(path).text)
+        print(self.get_file(path)['text'])
+
+    def list(self):
+        print('=== ' + str(self.get_absolute_path(self.pwd)) + ' ===')
+        for filename, file in self.pwd.iteritems():
+             
 
     def move(self, source, dest):
         sourcefile = self.get_file(source)
-
-        destparent = self.get_file('/'.join(dest.split('/')[0:-1]))
-        destname = dest.split('/')[-1]
-
-        if (type(sourcefile) == Directory):
-            destfile = Directory(destname, destparent)
-            destfile.files = sourcefile.files
-        elif (type(sourcefile) == TextFile):
-            destfile = TextFile(destname, destparent)
-            destfile.text = sourcefile.text
-
-        del(sourcefile.parent.files[sourcefile.name])
-        destparent.add_file(destfile)
-
-
-class File(object):
-    def __init__(self, name, parent):
-        self.name = name
-        self.parent = parent
-
-
-class Directory(File):
-    def __init__(self, name, parent):
-        File.__init__(self, name, parent)
-        self.files = {}
-
-    def add_file(self, filen):
-        self.files[filen.name] = filen
-
-
-class TextFile(File):
-    def __init__(self, name, parent):
-        File.__init__(self, name, parent)
-        self.text = ''
-
-    def append(self, text):
-        self.text = self.text + text
-
-
-class Link(File):
-    def __init__(self, name, parent, file=None):
-        File.__init__(self, name, parent)
-        self.link = file
+        print('Moving ' + str(sourcefile) + ' to ' + dest)
+        self.create(dest, file=sourcefile)
+        self.delete(source)
 
 
 if __name__ == '__main__':
     fs = FileSystem()
 
     commands = {
-        'home': lambda: fs.change_directory('/'),
-        'enter': fs.change_directory,
-        'create': lambda x: fs.create_file(x, 'text'),
-        'mkdir': lambda x: fs.create_file(x, 'dir'),
+        'home': fs.home,
+        'enter': fs.enter,
+        'cd': fs.enter,
+        'create': lambda path: fs.create(path, file={'text': ''}),
+        'touch': lambda path: fs.create(path, file={'text': ''}),
+        'mkdir': lambda path: fs.create(path, file={}),
         'append': fs.append,
         'show': fs.show,
-        'listfiles': fs.list_files,
+        'listfiles': fs.list,
+        'ls': fs.list,
         'move': fs.move,
-        'link': '10',
-        'delete': lambda x: os.system('rm {}'.format(x)),
+        'mv': fs.move,
+        # 'link': '10',
+        'delete': fs.delete,
+        'rm': fs.delete,
         'deleteall': '14',
         'quit': lambda: sys.exit(1),
     }
@@ -170,14 +106,14 @@ if __name__ == '__main__':
 
         parts = sys.stdin.readline().split(' ')
         command = parts[0].strip()
-        
+
         args = []
         if len(parts) > 1:
             args = [arg.strip() for arg in parts[1:]]
-        
+
         # print('Command: ' + command + ' args: ' + str(args))
 
-        try:
-            commands[command](*args)
-        except KeyError:
-            pass
+        # try:
+        commands[command](*args)
+        # except KeyError:
+        #     pass
