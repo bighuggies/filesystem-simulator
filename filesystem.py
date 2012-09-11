@@ -69,7 +69,25 @@ class FileSystem(object):
     def list(self):
         print('=== ' + str(self.get_absolute_path(self.pwd)) + ' ===')
         for filename, file in self.pwd.iteritems():
-            sys.stdout.write(filename) 
+            sys.stdout.write(filename)
+            for i in xrange(20 - len(filename)):
+                sys.stdout.write(' ')
+
+            if 'text' in file:
+                sys.stdout.write('  ')
+                size = str(len(file['text']))
+            else:
+                sys.stdout.write('d ')
+                filenames = [key for key in file.keys()]
+                size = str(len(':'.join(filenames)))
+    
+            for i in xrange(11 - len(size)):
+                sys.stdout.write(' ')
+            sys.stdout.write(size)
+
+            sys.stdout.write('\n')
+
+        sys.stdout.write('\n\n') 
 
     def move(self, source, dest):
         sourcefile = self.get_file(source)
