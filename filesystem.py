@@ -69,7 +69,7 @@ class FileSystem(object):
     def list(self):
         print('=== ' + str(self.get_absolute_path(self.pwd)) + ' ===')
         for filename, file in self.pwd.iteritems():
-             
+            sys.stdout.write(filename) 
 
     def move(self, source, dest):
         sourcefile = self.get_file(source)
