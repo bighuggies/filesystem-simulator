@@ -1,6 +1,5 @@
 #!/bin/bash
 
-mkdir filesystem 2> /dev/null
-cd filesystem
-echo | pwd
-../filesystem.py
+# Andrew Hughson | ahug048 | 1546814
+
+./filesystem.py
