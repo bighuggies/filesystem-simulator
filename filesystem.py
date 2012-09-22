@@ -260,7 +260,7 @@ if __name__ == '__main__':
             continue
 
         # The first index of the list is the command, the rest are args
-        args = [arg for arg in parts[1:]]
+        args = parts[1:]
 
         logging.info('CMD: ' + command + ' ARGS: ' + str(args))
 

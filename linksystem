@@ -2,4 +2,4 @@
 
 # Andrew Hughson | ahug048 | 1546814
 
-./filesystem.py
+python filesystem.py
